@@ -67,7 +67,7 @@
         }
 
         .btn-logout {
-            background-color: #BB9AB1;
+            background-color: #E74C3C;
             color: white;
             border: none;
             padding: 8px 20px;
@@ -76,10 +76,6 @@
             font-weight: bold;
             font-family: inherit;
             transition: 0.3s;
-        }
-
-        .btn-logout:hover {
-            background-color: #987D9A;
         }
 
         .container {
