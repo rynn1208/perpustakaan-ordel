@@ -10,6 +10,8 @@ use App\Models\Peminjaman;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
+
+
 Route::redirect('/', '/login');
 
 // Halaman Dashboard Utama 
