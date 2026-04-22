@@ -11,20 +11,23 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 
-
-Route::redirect('/', '/login');
+Route::get('/', function () {
+    return view('welcome');
+});
 
 // Halaman Dashboard Utama 
 Route::get('/dashboard', function () {
     if (Auth::user()->role == 'admin') {
         // Hitung data untuk Admin
-        $total_buku = Buku::count(); // Menghitung total judul buku
-        $buku_dipinjam = Peminjaman::where('status', 'Dipinjam')->count(); // Menghitung buku yang masih di tangan siswa
-        $total_siswa = User::where('role', 'siswa')->count(); // Menghitung total akun siswa
+        $total_buku = Buku::count();
+        $buku_dipinjam = Peminjaman::where('status', 'Dipinjam')->count();
+        $total_siswa = User::where('role', 'siswa')->count();
+        $denda = \App\Models\Denda::with(['user', 'peminjaman.buku'])->latest()->take(5)->get();
 
-        return view('dashboard', compact('total_buku', 'buku_dipinjam', 'total_siswa'));
+
+        return view('dashboard', compact('total_buku', 'buku_dipinjam', 'total_siswa', 'denda'));
     } else {
-        // Hitung data untuk Siswa
+
         $pinjaman_aktif = Peminjaman::where('user_id', Auth::id())
             ->where('status', 'Dipinjam')
             ->count();
@@ -45,6 +48,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // Rute Transaksi Admin 
     Route::get('/transaksi', [PeminjamanController::class, 'transaksiAdmin']);
     Route::delete('/transaksi/{id}', [PeminjamanController::class, 'destroy']);
+    // Rute Denda   
+    Route::get('/histori-denda', [PeminjamanController::class, 'historiDenda']);
+
 });
 
 // jalur siswa
@@ -64,6 +70,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::post('/anggota', [App\Http\Controllers\AnggotaController::class, 'store']);
+
 
 
 require __DIR__ . '/auth.php';

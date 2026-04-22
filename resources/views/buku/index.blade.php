@@ -18,7 +18,7 @@
 
         /* NAVBAR ELEGAN */
         .navbar {
-            background-color: #987D9A;
+            background-color: #1F6F5F;
             padding: 15px 30px;
             display: flex;
             justify-content: space-between;
@@ -119,7 +119,7 @@
         }
 
         .btn-submit {
-            background-color: #BB9AB1;
+            background-color: #1F6F5F;
             color: white;
             border: none;
             padding: 12px;
@@ -156,7 +156,7 @@
         }
 
         .badge-stok {
-            background-color: #BB9AB1;
+            background-color: #1F6F5F;
             color: white;
             padding: 5px 10px;
             border-radius: 5px;
@@ -172,12 +172,13 @@
 <body>
 
     <nav class="navbar">
-        <div class="brand">PERPUSTAKAAN | <span class="role-badge">{{ Auth::user()->role }}</span></div>
+        <div class="brand">Perpustakaan | <span class="role-badge">{{ Auth::user()->role }}</span></div>
         <div class="nav-links">
             <a href="/dashboard">Dashboard</a>
             <a href="/buku" class="active">Data Buku</a>
             <a href="/anggota">Kelola Anggota</a>
             <a href="/transaksi">Transaksi</a>
+            <a href="/histori-denda" class="active"> Histori Denda </a>
             <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
                 @csrf
                 <button class="btn-logout">Logout</button>
@@ -188,7 +189,7 @@
     <div class="container">
         <div class="card">
             <h3 class="card-header">📘 Tambah Koleksi Buku</h3>
-            <form method="POST" action="/buku" class="form-grid">
+            <form method="POST" action="/buku" class="form-grid" enctype="multipart/form-data">
                 @csrf
                 <input type="text" name="judul" placeholder="Judul Buku Lengkap" required>
                 <input type="text" name="pengarang" placeholder="Nama Pengarang" required>
@@ -196,6 +197,10 @@
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <input type="number" name="tahun_terbit" placeholder="Tahun (Cth: 2024)" required>
                     <input type="number" name="stok" placeholder="Jumlah Stok" min="0" required>
+                </div>
+                <div class="mb-4">
+                    <label>Foto Sampul</label>
+                    <input type="file" name="cover" class="form-control" accept="image/*">
                 </div>
                 <button type="submit" class="btn-submit">+ Simpan ke Katalog</button>
             </form>
@@ -211,6 +216,7 @@
                         <th>Tahun</th>
                         <th>Stok</th>
                         <th>Aksi</th>
+                        <th>Cover</th>
                     </tr>
                     @foreach($bukus as $row)
                         <tr>
@@ -233,6 +239,14 @@
                                         style="background: none; color: #e74c3c; border: none; font-weight: bold; cursor: pointer; padding: 0;">❌
                                         Hapus</button>
                                 </form>
+                            </td>
+                            <td>
+                                @if($row->cover)
+                                    <img src="{{ asset('storage/' . $row->cover) }}" alt="Cover Buku"
+                                        style="width: 60px; height: 80px; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                @else
+                                    <span class=" text-gray-400 text-xs">Tidak ada foto</span>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

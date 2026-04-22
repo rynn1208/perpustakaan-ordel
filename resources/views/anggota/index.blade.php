@@ -18,7 +18,7 @@
 
         /* NAVBAR ELEGAN */
         .navbar {
-            background-color: #987D9A;
+            background-color: #1F6F5F;
             padding: 15px 30px;
             display: flex;
             justify-content: space-between;
@@ -127,7 +127,7 @@
         }
 
         .badge-siswa {
-            background-color: #BB9AB1;
+            background-color: #1F6F5F;
             color: white;
             padding: 5px 10px;
             border-radius: 5px;
@@ -145,6 +145,7 @@
             <a href="/buku">Data Buku</a>
             <a href="/anggota" class="active">Kelola Anggota</a>
             <a href="/transaksi">Transaksi</a>
+            <a href="/histori-denda" class="active"> Histori Denda </a>
             <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
                 @csrf
                 <button class="btn-logout">Logout</button>

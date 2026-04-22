@@ -19,9 +19,9 @@
                     },
                     colors: {
                         'pastel-bg': '#fcf9ea', // Kuning redup/cream
-                        'pastel-purple': '#93738a', // Ungu Mauve (Navbar)
-                        'pastel-peach': '#eabba6', // Peach lembut (Aksen/Tombol)
-                        'pastel-peach-dark': '#d9a28b',
+                        'pastel-purple': '#1F6F5F', // Ungu Mauve (Navbar)
+                        'pastel-peach': '#1b433b', // Peach lembut (Aksen/Tombol)
+                        'pastel-peach-dark': '#1f6053',
                     }
                 }
             }

@@ -7,6 +7,7 @@ use App\Models\Buku;
 use App\Models\Peminjaman;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Models\Denda;
 
 class PeminjamanController extends Controller
 {
@@ -28,7 +29,7 @@ class PeminjamanController extends Controller
             return back()->with('error', 'Maaf, buku ini baru saja habis dipinjam orang lain.');
         }
 
-        $tgl_pinjam = $request->tanggal_pinjam_manual ?: date('Y-m-d');
+        $tgl_pinjam = date('Y-m-d');
 
         $cek_pinjam = Peminjaman::where('user_id', Auth::id())
             ->where('buku_id', $buku_id)
@@ -66,36 +67,38 @@ class PeminjamanController extends Controller
         return view('siswa.dipinjam', compact('peminjamans'));
     }
 
-    // Tambahkan Request $request di sini
     public function kembalikan(Request $request, $id)
     {
         $pinjam = Peminjaman::findOrFail($id);
 
         if (strtolower($pinjam->status) == 'dipinjam') {
-
             $tgl_pinjam = Carbon::parse($pinjam->tanggal_pinjam);
-            $tenggat_waktu = $tgl_pinjam->copy()->addDays(7); // Jatah 7 hari
-
-            // AMBIL TANGGAL DARI FORM SIMULASI (Jika kosong, pakai hari ini)
+            $tenggat_waktu = $tgl_pinjam->copy()->addDays(7);
             $tgl_kembali_simulasi = $request->tanggal_kembali_manual ?: date('Y-m-d');
-            $hari_ini = Carbon::parse($tgl_kembali_simulasi); // Mesin waktu aktif!
+            $hari_ini = Carbon::parse($tgl_kembali_simulasi);
 
             $pesan = 'Terima kasih telah mengembalikan buku tepat waktu!';
             $tipe_notif = 'success';
 
-            // Cek apakah tanggal simulasi kembali melebihi batas waktu
+            // --- BAGIAN LOGIKA DENDA OTOMATIS ---
             if ($hari_ini->greaterThan($tenggat_waktu)) {
                 $telat_hari = $tenggat_waktu->diffInDays($hari_ini);
-                $total_denda = $telat_hari * 1000; // Denda Rp 1.000 / hari
+                $total_denda = $telat_hari * 1000;
 
-                $pesan = "Buku dikembalikan. Anda terlambat $telat_hari hari! Silakan bayar denda sebesar Rp " . number_format($total_denda, 0, ',', '.') . " ke Admin.";
+                // SIMPAN KE TABEL DENDAS
+                Denda::create([
+                    'user_id' => $pinjam->user_id,
+                    'peminjaman_id' => $pinjam->id,
+                    'hari_telat' => $telat_hari,
+                    'total_denda' => $total_denda,
+                ]);
+
+                $pesan = "Buku dikembalikan. Anda terlambat $telat_hari hari! Data denda telah dicatat oleh Admin.";
                 $tipe_notif = 'warning';
             }
+            // ------------------------------------
 
-            // Kembalikan stok buku
             $pinjam->buku->increment('stok');
-
-            // Simpan perubahan dan catat tanggal kembalinya sesuai mesin waktu
             $pinjam->update([
                 'status' => 'dikembalikan',
                 'tanggal_kembali' => $hari_ini->format('Y-m-d')
@@ -131,6 +134,13 @@ class PeminjamanController extends Controller
     {
         Peminjaman::findOrFail($id)->delete();
         return back()->with('success', 'Riwayat transaksi berhasil dihapus dari sistem.');
+    }
+    public function historiDenda()
+    {
+        // Ambil data denda terbaru, lengkap dengan data user dan bukunya
+        $dendas = Denda::with(['user', 'peminjaman.buku'])->orderBy('id', 'desc')->get();
+
+        return view('admin.histori_denda', compact('dendas'));
     }
 }
 

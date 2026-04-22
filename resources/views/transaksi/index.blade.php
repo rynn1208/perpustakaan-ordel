@@ -17,7 +17,7 @@
         }
 
         .navbar {
-            background-color: #987D9A;
+            background-color: #1F6F5F;
             padding: 15px 30px;
             display: flex;
             justify-content: space-between;
@@ -123,7 +123,7 @@
         }
 
         .search-btn {
-            background-color: #987D9A;
+            background-color: #1F6F5F;
             color: white;
             border: none;
             padding: 8px 15px;
@@ -182,6 +182,7 @@
             <a href="/buku">Data Buku</a>
             <a href="/anggota">Kelola Anggota</a>
             <a href="/transaksi" class="active">Transaksi</a>
+            <a href="/histori-denda" class="active"> Histori Denda </a>
             <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
                 @csrf
                 <button class="btn-logout">Logout</button>

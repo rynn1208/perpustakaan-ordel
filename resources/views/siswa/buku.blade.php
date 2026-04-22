@@ -18,7 +18,7 @@
 
         /* NAVBAR ELEGAN */
         .navbar {
-            background-color: #987D9A;
+            background-color: #1F6F5F;
             padding: 15px 30px;
             display: flex;
             justify-content: space-between;
@@ -132,7 +132,7 @@
         }
 
         .btn-pinjam {
-            background-color: #BB9AB1;
+            background-color: #1F6F5F;
             color: white;
             border: none;
             padding: 10px;
@@ -146,6 +146,30 @@
 
         .btn-pinjam:hover {
             background-color: #2980b9;
+        }
+
+        .cover-buku {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #f1f1f1;
+        }
+
+        .cover-placeholder {
+            width: 100%;
+            height: 280px;
+            background-color: #fdfdfd;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #bdc3c7;
+            margin-bottom: 15px;
+            border: 2px dashed #eee;
+            font-size: 12px;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -173,6 +197,13 @@
             @foreach($bukus as $row)
                 <div class="card-buku">
                     <div>
+                        @if($row->cover)
+                            <img src="{{ asset('storage/' . $row->cover) }}" alt="Cover {{ $row->judul }}" class="cover-buku">
+                        @else
+                            <div class="cover-placeholder">
+                                Tidak ada cover
+                            </div>
+                        @endif
                         <h3 class="buku-judul">{{ $row->judul }}</h3>
                         <div class="buku-info">
                             ✏️ {{ $row->pengarang }}<br>
@@ -184,13 +215,16 @@
                     <form action="/peminjaman/{{ $row->id }}" method="POST" id="form-pinjam-{{ $row->id }}">
                         @csrf
 
-                        <div style="margin-bottom: 10px;">
+                        <div
+                            style="margin-bottom: 15px; background: #fdfdfd; padding: 10px; border-radius: 6px; border: 1px dashed #BB9AB1;">
                             <label
                                 style="font-size: 11px; color: #7f8c8d; font-weight: bold; display: block; margin-bottom: 3px;">
                                 📅 Tanggal Pinjam:
                             </label>
-                            <input type="date" name="tanggal_pinjam_manual" value="{{ date('Y-m-d') }}"
-                                style="width: 100%; padding: 5px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; font-family: inherit;">
+                            <div style="font-size: 13px; color: #1F6F5F; font-weight: 800;">
+                                {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }} <span style="color: #987D9A;">(Hari
+                                    Ini)</span>
+                            </div>
                         </div>
 
                         <button type="button" class="btn-pinjam"

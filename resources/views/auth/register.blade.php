@@ -26,14 +26,14 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             width: 100%;
             max-width: 450px;
-            border-top: 5px solid #BB9AB1;
+            border-top: 5px solid #1F6F5F;
         }
 
         .logo-text {
             text-align: center;
             font-size: 24px;
             font-weight: 800;
-            color: #987D9A;
+            color: #1F6F5F;
             margin-bottom: 5px;
         }
 
@@ -66,13 +66,13 @@
 
         input:focus,
         select:focus {
-            border-color: #BB9AB1;
+            border-color: #1F6F5F;
             outline: none;
             box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
         }
 
         .btn-register {
-            background-color: #BB9AB1;
+            background-color: #1F6F5F;
             color: white;
             border: none;
             padding: 12px;
@@ -100,7 +100,7 @@
         }
 
         .link-login:hover {
-            color: #BB9AB1;
+            color: #1F6F5F;
             font-weight: bold;
         }
     </style>

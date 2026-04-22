@@ -24,14 +24,14 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             width: 100%;
             max-width: 400px;
-            border-top: 5px solid #BB9AB1;
+            border-top: 5px solid #1F6F5F;
         }
 
         .logo-text {
             text-align: center;
             font-size: 24px;
             font-weight: 800;
-            color: #987D9A;
+            color: #1F6F5F;
             margin-bottom: 5px;
         }
 
@@ -68,7 +68,7 @@
         }
 
         .btn-login {
-            background-color: #BB9AB1;
+            background-color: #1F6F5F;
             color: white;
             border: none;
             padding: 12px;
@@ -83,7 +83,7 @@
         }
 
         .btn-login:hover {
-            background-color: #745d6d;
+            background-color: #1F6F5F;
         }
 
         .link-register {
